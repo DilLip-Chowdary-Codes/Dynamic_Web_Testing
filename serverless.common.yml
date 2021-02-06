@@ -1,0 +1,6 @@
+# We will use this `serverless.yml` to share some config across all of our serverless.yml files.
+custom:
+    stage: ${opt:stage, self:provider.stage}
+
+plugins:
+  - serverless-offline

@@ -1,0 +1,31 @@
+service: css-web-testing
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 512
+  timeout: 60
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'ap-south-1'}
+  profile: ${opt:profile, 'default'}
+  logs:
+    restApi: true
+  apiGateway:
+    restApiId:
+      'Fn::ImportValue': ${self:provider.stage}-DynamicWebTestingApiGatewayRestApiId
+    restApiRootResourceId:
+      'Fn::ImportValue': ${self:provider.stage}-DynamicWebTestingApiGatewayRestApiRootResourceId
+
+functions:
+  css-code-testing:
+    handler: index.handler
+    events:
+      - http:
+          path: css-code-evaluation/v1
+          method: post
+
+plugins:
+  - serverless-offline

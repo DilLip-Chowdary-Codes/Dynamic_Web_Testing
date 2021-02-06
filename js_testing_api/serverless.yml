@@ -1,0 +1,43 @@
+service: dynamic-web-testing
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 512
+  timeout: 60
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'ap-south-1'}
+  profile: ${opt:profile, 'default'}
+  logs:
+    restApi: true
+
+functions:
+  web-code-testing:
+
+    handler: index.handler
+
+    events:
+      - http:
+          path: js-programming-evaluation/v1
+          method: post
+
+plugins:
+  - serverless-offline
+
+resources:
+ - Outputs:
+    ApiGatewayRestApiId:
+      Value:
+        Ref: ApiGatewayRestApi
+      Export:
+        Name: ${self:provider.stage}-DynamicWebTestingApiGatewayRestApiId
+    ApiGatewayRestApiRootResourceId:
+     Value:
+         Fn::GetAtt:
+          - ApiGatewayRestApi
+          - RootResourceId 
+     Export:
+        Name: ${self:provider.stage}-DynamicWebTestingApiGatewayRestApiRootResourceId
