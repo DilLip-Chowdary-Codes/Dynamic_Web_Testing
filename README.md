@@ -11,7 +11,7 @@
 - At root Directory (Dynamic_Web_Testing)  install required packages
 
 	```
-	npm install
+	yarn
 	```
 
 - Install Required packages in  `js_testing_api` 
